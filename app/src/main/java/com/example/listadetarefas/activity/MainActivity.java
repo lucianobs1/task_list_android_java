@@ -8,6 +8,7 @@ import com.example.listadetarefas.R;
 import com.example.listadetarefas.adapter.TarefaAdapter;
 import com.example.listadetarefas.helper.DbHelper;
 import com.example.listadetarefas.helper.RecyclerItemClickListener;
+import com.example.listadetarefas.helper.TarefaDAO;
 import com.example.listadetarefas.models.Tarefa;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -52,7 +53,15 @@ public class MainActivity extends AppCompatActivity {
                         new RecyclerItemClickListener.OnItemClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {
-                                Log.i("clique", "onItemClick");
+
+                                //Recuperar tarefa para edicao
+                                Tarefa tarefaSelecionada = listaTarefas.get(position);
+
+                                //Envia tarefa para tela adicionar tarefa
+                                Intent intent = new Intent(MainActivity.this, AdicionarTarefaActivity.class);
+                                intent.putExtra("tarefaSelecionada", tarefaSelecionada);
+
+                                startActivity(intent);
                             }
 
                             @Override
@@ -82,13 +91,8 @@ public class MainActivity extends AppCompatActivity {
     public void carregarListaTarefas(){
 
 //        Listar tarefas
-        Tarefa tarefa1 = new Tarefa();
-        tarefa1.setNomeTarefa("Ir ao mercado");
-        listaTarefas.add(tarefa1);
-
-        Tarefa tarefa2 = new Tarefa();
-        tarefa2.setNomeTarefa("Ir ao Shopping");
-        listaTarefas.add(tarefa2);
+          TarefaDAO tarefaDAO = new TarefaDAO(getApplicationContext());
+          listaTarefas = tarefaDAO.listar();
 
 //        Exibe lista de tarefas
 
